@@ -179,14 +179,13 @@ class TestProductRoutes(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(data["id"], product.id)
-    
+
     def test_update_product(self):
         """Update a product"""
-        
+
         product = self._create_products(1)[0]
         response = self.client.post(BASE_URL, json=product.serialize())
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
 
         new_product = response.get_json()
         new_product["name"] = "NEW_NAME"
@@ -194,7 +193,7 @@ class TestProductRoutes(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_product = response.get_json()
         self.assertEqual(updated_product["name"], "NEW_NAME")
-    
+
     def test_delete_product(self):
         """Delete a product"""
 
@@ -243,12 +242,11 @@ class TestProductRoutes(TestCase):
         found_count = len(found)
         logging.debug("Found Products [%d] %s", found_count, found)
 
-        
         response = self.client.get(BASE_URL, query_string=f"category={category.name}")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(len(data), found_count)
-        
+
         for product in data:
             self.assertEqual(product["category"], category.name)
 
@@ -257,19 +255,18 @@ class TestProductRoutes(TestCase):
         List by availability
         """
         products = self._create_products(10)
-        available_products = [product for product in products if product.available is True]
-        available_count = len(available_products)        
+        available_products = [
+            product for product in products if product.available is True
+        ]
+        available_count = len(available_products)
         # test for available
-        response = self.client.get(
-            BASE_URL, query_string="available=true"
-        )
+        response = self.client.get(BASE_URL, query_string="available=true")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         data = response.get_json()
         self.assertEqual(len(data), available_count)
         # check the data just to be sure
         for product in data:
             self.assertEqual(product["available"], True)
-
 
     ######################################################################
     # Utility functions

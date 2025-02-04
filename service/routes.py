@@ -95,6 +95,7 @@ def create_products():
 # L I S T   A L L   P R O D U C T S
 ######################################################################
 
+
 @app.route("/products", methods=["GET"])
 def list_products():
     """Returns a list of Products"""
@@ -123,9 +124,11 @@ def list_products():
     app.logger.info("[%s] Products returned", len(results))
     return results, status.HTTP_200_OK
 
+
 ######################################################################
 # R E A D   A   P R O D U C T
 ######################################################################
+
 
 @app.route("/products/<int:product_id>", methods=["GET"])
 def get_products(product_id):
@@ -135,13 +138,16 @@ def get_products(product_id):
     app.logger.info("Searching product")
     product = Product.find(product_id)
     if not product:
-        abort(status.HTTP_404_NOT_FOUND, f"Product not found")
+        abort(status.HTTP_404_NOT_FOUND, "Product not found")
 
     app.logger.info("Returning product")
     return product.serialize(), status.HTTP_200_OK
+
+
 ######################################################################
 # U P D A T E   A   P R O D U C T
 ######################################################################
+
 
 @app.route("/products/<int:product_id>", methods=["PUT"])
 def update_product(product_id):
@@ -152,15 +158,17 @@ def update_product(product_id):
     check_content_type("application/json")
     product = Product.find(product_id)
     if not product:
-        abort(status.HTTP_404_NOT_FOUND, f"Product not found.")
+        abort(status.HTTP_404_NOT_FOUND, "Product not found.")
     product.deserialize(request.get_json())
     product.id = product_id
     product.update()
     return product.serialize(), status.HTTP_200_OK
 
+
 ######################################################################
 # D E L E T E   A   P R O D U C T
 ######################################################################
+
 
 @app.route("/products/<int:product_id>", methods=["DELETE"])
 def delete_product(product_id):

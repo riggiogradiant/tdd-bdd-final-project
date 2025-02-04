@@ -26,6 +26,7 @@ While debugging just these tests it's convenient to use this:
 import os
 import logging
 import unittest
+from decimal import Decimal
 from service.models import Product, Category, db
 from service import app
 from tests.factories import ProductFactory
@@ -87,24 +88,24 @@ class TestProductModel(unittest.TestCase):
         self.assertEqual(product.price, 12.50)
         self.assertEqual(product.category, Category.CLOTHS)
 
-    # def test_add_a_product(self):
-    #     """It should Create a product and add it to the database"""
-    #     products = Product.all()
-    #     self.assertEqual(products, [])
-    #     product = ProductFactory()
-    #     product.id = None
-    #     product.create()
-    #     # Assert that it was assigned an id and shows up in the database
-    #     self.assertIsNotNone(product.id)
-    #     products = Product.all()
-    #     self.assertEqual(len(products), 1)
-    #     # Check that it matches the original product
-    #     new_product = products[0]
-    #     self.assertEqual(new_product.name, product.name)
-    #     self.assertEqual(new_product.description, product.description)
-    #     self.assertEqual(Decimal(new_product.price), product.price)
-    #     self.assertEqual(new_product.available, product.available)
-    #     self.assertEqual(new_product.category, product.category)
+    def test_add_a_product(self):
+        """It should Create a product and add it to the database"""
+        products = Product.all()
+        self.assertEqual(products, [])
+        product = ProductFactory()
+        product.id = None
+        product.create()
+        # Assert that it was assigned an id and shows up in the database
+        self.assertIsNotNone(product.id)
+        products = Product.all()
+        self.assertEqual(len(products), 1)
+        # Check that it matches the original product
+        new_product = products[0]
+        self.assertEqual(new_product.name, product.name)
+        self.assertEqual(new_product.description, product.description)
+        self.assertEqual(Decimal(new_product.price), product.price)
+        self.assertEqual(new_product.available, product.available)
+        self.assertEqual(new_product.category, product.category)
 
     #
     # ADD YOUR TEST CASES HERE
@@ -230,11 +231,3 @@ class TestProductModel(unittest.TestCase):
 
         with self.assertRaises(Exception):
             product.update()
-
-    # def test_deserialize_missing_field(self):
-    #     """Test that deserialize raises DataValidationError when a required field is missing"""
-
-    #     product = Product()  # Asumiendo que `Product` es la clase que contiene el método `deserialize`
-    #     product.available = None
-    #     with self.assertRaises(Exception) as cm:
-    #         product.deserialize(data)
